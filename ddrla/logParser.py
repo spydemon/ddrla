@@ -24,9 +24,11 @@ class LogParser:
     def __init__(self, file):
         self.log_dictionary = []
         self.log_statistics = {}
+        self.log_ratio = {}
         self.current_status = None
         self.__init_log_statistics()
         self.__process_log_parsing(file)
+        self.__compute_percentage()
 
     def get_log_dictionary(self):
         return self.log_dictionary
@@ -57,6 +59,9 @@ class LogParser:
 
     def get_bad_bytes(self):
         return self.log_statistics['bad']
+
+    def get_percentage_of(self, state):
+        return self.log_ratio[state]
 
     def __init_log_statistics(self):
         def set_log_statistics_to_zero(state):
@@ -129,3 +134,11 @@ class LogParser:
         size_of_block = int(line[1], 16)
         self.log_statistics[symbols_to_states[line[2]]] += size_of_block
         self.log_statistics['total'] += size_of_block
+
+    def __compute_percentage(self):
+        """
+            Compute the percentage of presence of each state.
+        """
+        for state, amount in self.log_statistics.iteritems():
+            self.log_ratio[state] = (float(amount) / self.log_statistics['total'] * 100)
+

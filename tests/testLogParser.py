@@ -76,3 +76,9 @@ class TestLogParser(unittest.TestCase):
     def test_get_bad_bytes(self):
         badBytes = self.parser.get_bad_bytes()
         self.assertEqual(badBytes, 639744)
+
+    def test_get_percentage_of(self):
+        nontrimmed_ratio = self.parser.get_percentage_of('nontrimmed')
+        self.assertEqual(nontrimmed_ratio, 0.024433944226512263)
+        rescued_ratio = self.parser.get_percentage_of('rescued')
+        self.assertEqual(rescued_ratio, 88.65377559471504)
